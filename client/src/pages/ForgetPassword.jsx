@@ -430,7 +430,9 @@ const ForgetPassword = () => {
 
         <div className="relative z-20 flex items-center text-lg font-medium gap-2">
           <Wallpaper className="h-6 w-6" />
-          <span className="font-bold uppercase tracking-wider">Team Task Manager</span>
+          <span className="font-bold uppercase tracking-wider">
+            Team Task Manager
+          </span>
         </div>
 
         <div className="relative z-20 mt-auto">
@@ -439,7 +441,7 @@ const ForgetPassword = () => {
               "Organize your team tasks and projects in one central workspace."
             </p>
             <footer className="text-sm font-medium tracking-wide text-white/80">
-              TEAM TASK MANAGER
+              Team Task Manager
             </footer>
           </blockquote>
         </div>

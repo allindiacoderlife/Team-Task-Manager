@@ -7,7 +7,7 @@ const Login = () => {
       {/* Left Side: Image Section */}
       <div className="relative hidden w-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <img
-          src="https://miro.medium.com/0*YpfYrg_NhcPA4gJo.png"
+          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
         />
@@ -16,7 +16,7 @@ const Login = () => {
 
         <div className="relative z-20 flex items-center text-lg font-medium gap-2">
           <Wallpaper className="h-6 w-6" />
-          <span className="font-bold uppercase tracking-wider">Team Task Manager</span>
+          <span className="font-bold">Team Task Manager</span>
         </div>
 
         <div className="relative z-20 mt-auto">

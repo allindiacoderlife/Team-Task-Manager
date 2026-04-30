@@ -116,7 +116,7 @@ export function VerifyForm({ className, ...props }) {
         <div className="space-y-4">
           <Button
             type="submit"
-            className="w-full py-6 text-base font-semibold shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30"
+            className="w-full py-6 text-base font-semibold bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 shadow-xl transition-all"
             disabled={value.length !== 6 || isLoading}
           >
             {isLoading ? (

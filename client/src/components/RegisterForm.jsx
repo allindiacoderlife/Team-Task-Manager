@@ -140,7 +140,7 @@ export function RegisterForm({ className, ...props }) {
 
         <Button
           type="submit"
-          className="w-full py-6 text-base shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30"
+          className="w-full py-6 text-base bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 shadow-xl transition-all"
           disabled={isLoading}
         >
           {isLoading ? (
