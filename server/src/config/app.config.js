@@ -2,6 +2,7 @@ export const config = {
   //! ─── App Configuration ────────────────────────────────
   port: process.env.PORT || 8000,
   nodeEnv: process.env.NODE_ENV || "development",
+  appUrl: process.env.APP_URL || "http://localhost:5173",
 
   //! ─── Database Configuration ───────────────────────────
   databaseUrl: process.env.DATABASE_URL,
