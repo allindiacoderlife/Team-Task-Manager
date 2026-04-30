@@ -39,7 +39,7 @@ export class AuthService {
       },
     });
 
-    return { success: true, message: "Admin registered successfully" };
+    return { success: true, message: "User registered successfully" };
   }
 
   async login({ email, password }) {

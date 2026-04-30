@@ -25,3 +25,8 @@ enum ProjectRole {
   ADMIN
   MEMBER
 }
+
+enum OTPType {
+  LOGIN
+  RESET_PASSWORD
+}

@@ -10,6 +10,7 @@ model User {
   memberships ProjectMember[]
   tasks       Task[]          @relation("UserTasks")
   task        Task?           @relation(fields: [taskId], references: [id])
+  otps        OTP[]
 
   @@map("users")
 }

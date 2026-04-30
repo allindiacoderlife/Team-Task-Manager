@@ -1,1 +1,11 @@
+model OTP {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  type      OTPType
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  users     User[]
 
+  @@map("otps")
+}
