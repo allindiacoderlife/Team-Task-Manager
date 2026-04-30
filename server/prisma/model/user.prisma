@@ -1,16 +1,21 @@
 model User {
-  id          String          @id @default(cuid())
-  name        String
-  email       String          @unique
-  password    String
-  role        Role            @default(USER)
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  taskId      Int?
-  memberships ProjectMember[]
-  tasks       Task[]          @relation("UserTasks")
-  task        Task?           @relation(fields: [taskId], references: [id])
-  otps        OTP[]
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  image     String   @default("")
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspaces      WorkspaceMember[]
+  projects        Project[]         @relation("ProjectOwner")
+  tasks           Task[]            @relation("TaskAssignee")
+  comments        Comment[]
+  ownedWorkspaces Workspace[]
+  ProjectMember   ProjectMember[]
+  otps            OTP[]
+  invitationsSent Invitation[]      @relation("InvitedBy")
 
   @@map("users")
 }

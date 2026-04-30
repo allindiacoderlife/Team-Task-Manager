@@ -1,32 +1,49 @@
-enum Role {
-  USER
-  ADMIN
+enum WorkspaceRole {
+    ADMIN
+    MEMBER
 }
 
 enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  COMPLETED
+    TODO
+    IN_PROGRESS
+    DONE
 }
 
-enum TaskPriority {
-  LOW
-  MEDIUM
-  HIGH
+enum TaskType {
+    TASK
+    BUG
+    FEATURE
+    IMPROVEMENT
+    OTHER
 }
 
 enum ProjectStatus {
-  ACTIVE
-  INACTIVE
+    ACTIVE
+    PLANNING
+    COMPLETED
+    ON_HOLD
+    CANCELLED
 }
 
-enum ProjectRole {
-  OWNER
-  ADMIN
-  MEMBER
+enum Priority {
+    LOW
+    MEDIUM
+    HIGH
+}
+
+enum Role {
+    USER
+    ADMIN
 }
 
 enum OTPType {
-  LOGIN
-  RESET_PASSWORD
+    LOGIN
+    RESET_PASSWORD
+}
+
+enum InvitationStatus {
+    PENDING
+    ACCEPTED
+    REJECTED
+    EXPIRED
 }

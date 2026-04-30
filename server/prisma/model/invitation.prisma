@@ -1,0 +1,20 @@
+model Invitation {
+    id          String           @id @default(uuid())
+    email       String
+    workspaceId String
+    projectId   String?
+    role        String           @default("MEMBER")
+    token       String           @unique
+    invitedById String
+    status      InvitationStatus @default(PENDING)
+    expiresAt   DateTime
+    createdAt   DateTime         @default(now())
+
+    project Project? @relation("ProjectInvitations", fields: [projectId], references: [id], onDelete: Cascade)
+    
+    // Relation to workspace if not project specific
+    workspace_rel Workspace @relation("WorkspaceInvitations", fields: [workspaceId], references: [id], onDelete: Cascade)
+    invitedBy     User      @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
+
+    @@map("invitations")
+}
