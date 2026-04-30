@@ -12,5 +12,6 @@ router.post("/", asyncHandler(workspaceController.create));
 router.get("/my", asyncHandler(workspaceController.getMyWorkspaces));
 router.get("/:id", asyncHandler(workspaceController.getById));
 router.post("/:id/members", asyncHandler(workspaceController.addMember));
+router.delete("/:id/members/:memberId", asyncHandler(workspaceController.removeMember));
 
 export default router;

@@ -28,4 +28,13 @@ export class WorkspaceController {
     );
     res.json(result);
   }
+
+  async removeMember(req, res) {
+    const result = await workspaceService.removeMember(
+      req.params.id,
+      req.params.memberId,
+      req.user.id
+    );
+    res.json(result);
+  }
 }

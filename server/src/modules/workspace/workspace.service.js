@@ -142,4 +142,37 @@ export class WorkspaceService {
 
     return newMember;
   }
+
+  async removeMember(workspaceId, memberId, adminId) {
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: workspaceId },
+      include: { members: true },
+    });
+
+    if (!workspace) throw new NotFoundError("Workspace not found");
+
+    const isAdmin = workspace.members.some((m) => m.userId === adminId && m.role === "ADMIN");
+    if (!isAdmin && workspace.ownerId !== adminId) {
+      throw new ForbiddenError("Only workspace admins can remove members");
+    }
+
+    if (memberId === workspace.ownerId) {
+      throw new BadRequestError("Workspace owner cannot be removed");
+    }
+
+    // Remove from workspace_members
+    await prisma.workspaceMember.delete({
+      where: { userId_workspaceId: { userId: memberId, workspaceId } },
+    });
+
+    // Also remove from all projects in this workspace
+    await prisma.projectMember.deleteMany({
+      where: {
+        userId: memberId,
+        project: { workspaceId }
+      }
+    });
+
+    return { success: true };
+  }
 }
