@@ -87,7 +87,7 @@ export class InvitationService {
   async acceptInvitation(token, userId) {
     const invitation = await prisma.invitation.findUnique({
       where: { token },
-      include: { workspace_rel: true }
+      include: { workspace_rel: true, project: true }
     });
 
     if (!invitation) throw new NotFoundError("Invitation not found");
@@ -134,7 +134,7 @@ export class InvitationService {
         where: { token },
         include: { 
             workspace_rel: true,
-            workspace: true, // This is the project relation in invitation.prisma if projectId is present
+            project: true, 
             invitedBy: true
         }
     });
