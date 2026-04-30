@@ -1,11 +1,13 @@
 import { FolderOpen, CheckCircle, Users, AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useAuth } from "../context/AuthContext";
 
 export default function StatsGrid() {
     const currentWorkspace = useSelector(
         (state) => state?.workspace?.currentWorkspace || null
     );
+    const { user } = useAuth();
 
     const [stats, setStats] = useState({
         totalProjects: 0,
@@ -64,13 +66,13 @@ export default function StatsGrid() {
                     (acc, project) =>
                         acc +
                         (project.tasks || []).filter(
-                            (t) => t.assignee?.email === currentWorkspace.owner?.email
+                            (t) => t.assigneeId === user?.id
                         ).length,
                     0
                 ),
                 overdueIssues: currentWorkspace.projects.reduce(
                     (acc, project) =>
-                        acc + (project.tasks || []).filter((t) => new Date(t.dueDate || t.due_date) < new Date() && t.status !== "DONE").length,
+                        acc + (project.tasks || []).filter((t) => t.due_date && new Date(t.due_date) < new Date() && t.status !== "DONE").length,
                     0
                 ),
             });
