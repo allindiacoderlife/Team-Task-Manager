@@ -30,12 +30,27 @@ export class AuthService {
       config.security.saltRounds,
     );
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         name,
-        email,
+        email: normalizedEmail,
         password: hashedPassword,
         role,
+      },
+    });
+
+    // Create a default workspace for the new user
+    await prisma.workspace.create({
+      data: {
+        name: `${name}'s Workspace`,
+        slug: `${name.toLowerCase().replace(/\s+/g, '-')}-workspace-${Math.floor(Math.random() * 1000)}`,
+        ownerId: user.id,
+        members: {
+          create: {
+            userId: user.id,
+            role: "ADMIN",
+          },
+        },
       },
     });
 
