@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, Check, Plus } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
+import CreateWorkspaceDialog from "./CreateWorkspaceDialog";
 import { setCurrentWorkspace } from "../features/workspaceSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +10,7 @@ function WorkspaceDropdown() {
     const { workspaces } = useSelector((state) => state.workspace);
     const currentWorkspace = useSelector((state) => state.workspace?.currentWorkspace || null);
     const [isOpen, setIsOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const dispatch = useDispatch();
@@ -74,13 +76,24 @@ function WorkspaceDropdown() {
 
                     <hr className="border-gray-200 dark:border-zinc-700" />
 
-                    <div className="p-2 cursor-pointer rounded group hover:bg-gray-100 dark:hover:bg-zinc-800" >
+                    <div 
+                        onClick={() => {
+                            setIsCreateModalOpen(true);
+                            setIsOpen(false);
+                        }} 
+                        className="p-2 cursor-pointer rounded group hover:bg-gray-100 dark:hover:bg-zinc-800" 
+                    >
                         <p className="flex items-center text-xs gap-2 my-1 w-full text-blue-600 dark:text-blue-400 group-hover:text-blue-500 dark:group-hover:text-blue-300">
                             <Plus className="w-4 h-4" /> Create Workspace
                         </p>
                     </div>
                 </div>
             )}
+
+            <CreateWorkspaceDialog 
+                isOpen={isCreateModalOpen} 
+                setIsOpen={setIsCreateModalOpen} 
+            />
         </div>
     );
 }
