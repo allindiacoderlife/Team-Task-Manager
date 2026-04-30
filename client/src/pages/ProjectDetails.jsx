@@ -7,6 +7,7 @@ import ProjectSettings from "../components/ProjectSettings";
 import CreateTaskDialog from "../components/CreateTaskDialog";
 import ProjectCalendar from "../components/ProjectCalendar";
 import ProjectTasks from "../components/ProjectTasks";
+import ProjectBoard from "../components/ProjectBoard";
 
 export default function ProjectDetail() {
 
@@ -96,7 +97,8 @@ export default function ProjectDetail() {
             <div>
                 <div className="inline-flex flex-wrap max-sm:grid grid-cols-3 gap-2 border border-zinc-200 dark:border-zinc-800 rounded overflow-hidden">
                     {[
-                        { key: "tasks", label: "Tasks", icon: FileStackIcon },
+                        { key: "tasks", label: "List", icon: FileStackIcon },
+                        { key: "board", label: "Board", icon: ZapIcon },
                         { key: "calendar", label: "Calendar", icon: CalendarIcon },
                         { key: "analytics", label: "Analytics", icon: BarChart3Icon },
                         { key: "settings", label: "Settings", icon: SettingsIcon },
@@ -112,6 +114,11 @@ export default function ProjectDetail() {
                     {activeTab === "tasks" && (
                         <div className=" dark:bg-zinc-900/40 rounded max-w-6xl">
                             <ProjectTasks tasks={tasks} />
+                        </div>
+                    )}
+                    {activeTab === "board" && (
+                        <div className=" dark:bg-zinc-900/40 rounded max-w-6xl">
+                            <ProjectBoard tasks={tasks} projectId={id} />
                         </div>
                     )}
                     {activeTab === "analytics" && (

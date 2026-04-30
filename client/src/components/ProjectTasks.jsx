@@ -117,7 +117,10 @@ const ProjectTasks = ({ tasks }) => {
                                 { label: "All Statuses", value: "" },
                                 { label: "To Do", value: "TODO" },
                                 { label: "In Progress", value: "IN_PROGRESS" },
+                                { label: "Review", value: "REVIEW" },
+                                { label: "Testing", value: "TESTING" },
                                 { label: "Done", value: "DONE" },
+                                { label: "Blocked", value: "BLOCKED" },
                             ],
                             type: [
                                 { label: "All Types", value: "" },
@@ -160,7 +163,10 @@ const ProjectTasks = ({ tasks }) => {
                                 <option value="" disabled>Change Status</option>
                                 <option value="TODO">To Do</option>
                                 <option value="IN_PROGRESS">In Progress</option>
+                                <option value="REVIEW">Review</option>
+                                <option value="TESTING">Testing</option>
                                 <option value="DONE">Done</option>
+                                <option value="BLOCKED">Blocked</option>
                             </select>
                             <button type="button" onClick={handleDelete} className="px-3 py-1 flex items-center gap-2 rounded bg-gradient-to-br from-red-400 to-red-500 text-zinc-100 dark:text-zinc-200 text-sm transition-colors" >
                                 <Trash className="size-3" /> Delete
@@ -215,7 +221,10 @@ const ProjectTasks = ({ tasks }) => {
                                                 <select name="status" onChange={(e) => handleStatusChange(task.id, e.target.value)} value={task.status} className="group-hover:ring ring-zinc-100 dark:group-hover:ring-zinc-800 outline-none px-2 pr-4 py-1 rounded text-sm text-zinc-900 dark:text-zinc-200 cursor-pointer bg-transparent" >
                                                     <option value="TODO">To Do</option>
                                                     <option value="IN_PROGRESS">In Progress</option>
+                                                    <option value="REVIEW">Review</option>
+                                                    <option value="TESTING">Testing</option>
                                                     <option value="DONE">Done</option>
+                                                    <option value="BLOCKED">Blocked</option>
                                                 </select>
                                             </td>
                                             <td className="px-4 py-2">
