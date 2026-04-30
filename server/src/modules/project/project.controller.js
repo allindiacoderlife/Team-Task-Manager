@@ -1,6 +1,8 @@
 import { ProjectService } from "./project.service.js";
+import { InvitationService } from "../invitation/invitation.service.js";
 
 const projectService = new ProjectService();
+const invitationService = new InvitationService();
 
 export class ProjectController {
   async create(req, res) {
@@ -13,20 +15,29 @@ export class ProjectController {
     res.json(result);
   }
 
-  async addMember(req, res) {
-    const result = await projectService.addMember(
-      parseInt(req.params.id),
+  async update(req, res) {
+    const result = await projectService.updateProject(
+      req.params.id,
       req.body,
-      req.user.id,
+      req.user.id
+    );
+    res.json(result);
+  }
+
+  async addMember(req, res) {
+    const result = await invitationService.createProjectInvitation(
+      req.params.id,
+      req.body,
+      req.user.id
     );
     res.json(result);
   }
 
   async removeMember(req, res) {
     const result = await projectService.removeMember(
-      parseInt(req.params.id),
+      req.params.id,
       req.params.userId,
-      req.user.id,
+      req.user.id
     );
     res.json(result);
   }

@@ -10,6 +10,7 @@ router.use(authenticate);
 
 router.post("/", asyncHandler(projectController.create));
 router.get("/my", asyncHandler(projectController.getMyProjects));
+router.patch("/:id", asyncHandler(projectController.update));
 router.post("/:id/members", asyncHandler(projectController.addMember));
 router.delete("/:id/members/:userId", asyncHandler(projectController.removeMember));
 
