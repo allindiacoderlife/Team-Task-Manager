@@ -1,0 +1,27 @@
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ProjectStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ProjectRole {
+  OWNER
+  ADMIN
+  MEMBER
+}

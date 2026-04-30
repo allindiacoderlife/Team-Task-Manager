@@ -1,0 +1,22 @@
+model TodoList {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  items       TodoItem[]
+
+  @@map("todo_lists")
+}
+
+model TodoItem {
+  id          Int      @id @default(autoincrement())
+  content     String
+  isCompleted Boolean  @default(false)
+  listId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  list        TodoList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@map("todo_items")
+}
