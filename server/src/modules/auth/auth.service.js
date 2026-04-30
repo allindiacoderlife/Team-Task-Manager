@@ -90,7 +90,7 @@ export class AuthService {
 
     try {
       // Save hashed OTP to database
-      await prisma.otp.create({
+      await prisma.oTP.create({
         data: {
           email: normalizedEmail,
           code: hashedOtp,
@@ -113,16 +113,16 @@ export class AuthService {
 
       return { success: true, message: "OTP sent successfully" };
     } catch (error) {
-      console.error("Failed to send OTP email:", error);
+      console.error("❌ sendEmailOtp failed:", error);
       throw new Error(
-        "Failed to send verification email. Please try again later.",
+        error?.message || "Failed to send verification email. Please try again later.",
       );
     }
   }
 
   async verifyOtpAndLogin({ email, code }) {
     const normalizedEmail = email.toLowerCase();
-    const otpRecord = await prisma.otp.findFirst({
+    const otpRecord = await prisma.oTP.findFirst({
       where: {
         email: normalizedEmail,
         type: "LOGIN",
@@ -145,7 +145,7 @@ export class AuthService {
     const user = otpRecord.users[0];
 
     // Delete OTP after successful use
-    await prisma.otp.delete({ where: { id: otpRecord.id } });
+    await prisma.oTP.delete({ where: { id: otpRecord.id } });
 
     const payload = {
       id: user.id,
@@ -178,7 +178,7 @@ export class AuthService {
     }
 
     const normalizedEmail = email.toLowerCase();
-    const otpRecord = await prisma.otp.findFirst({
+    const otpRecord = await prisma.oTP.findFirst({
       where: {
         email: normalizedEmail,
         type: "RESET_PASSWORD",
@@ -210,7 +210,7 @@ export class AuthService {
     });
 
     // Delete OTP after successful use
-    await prisma.otp.delete({ where: { id: otpRecord.id } });
+    await prisma.oTP.delete({ where: { id: otpRecord.id } });
 
     return {
       success: true,

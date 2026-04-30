@@ -2,10 +2,12 @@ import "dotenv/config";
 import pg from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/index.js";
-import { config } from "../config/app.config.js";
 
 function createPrismaClient() {
-  const connectionString = config.databaseUrl;
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error("DATABASE_URL is not set in environment variables.");
+  }
   const pool = new pg.Pool({
     connectionString,
     connectionTimeoutMillis: 10000,
@@ -22,11 +24,7 @@ function createPrismaClient() {
   });
 }
 
-const prisma = globalThis.prisma || createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalThis.prisma = prisma;
-}
+const prisma = createPrismaClient();
 
 export { prisma };
 export default prisma;
