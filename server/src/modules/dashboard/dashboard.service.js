@@ -7,7 +7,7 @@ export class DashboardService {
         where: {
           OR: [
             { assigneeId: userId },
-            { project: { memberships: { some: { userId } } } },
+            { project: { members: { some: { userId } } } },
           ],
         },
       }),
@@ -16,7 +16,7 @@ export class DashboardService {
         where: {
           OR: [
             { assigneeId: userId },
-            { project: { memberships: { some: { userId } } } },
+            { project: { members: { some: { userId } } } },
           ],
         },
         _count: true,
@@ -24,18 +24,16 @@ export class DashboardService {
       prisma.task.count({
         where: {
           assigneeId: userId,
-          status: { not: "COMPLETED" },
-          dueDate: { lt: new Date() },
+          status: { not: "DONE" },
+          due_date: { lt: new Date() },
         },
       }),
     ]);
 
-    // Get tasks per user for projects I admin/own
+    // Get tasks per user for projects I team lead
     const myManagedProjects = await prisma.project.findMany({
       where: {
-        memberships: {
-          some: { userId, role: { in: ["OWNER", "ADMIN"] } },
-        },
+        team_lead: userId
       },
       select: { id: true },
     });
