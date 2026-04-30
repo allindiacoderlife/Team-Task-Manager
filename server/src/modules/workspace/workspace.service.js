@@ -48,7 +48,11 @@ export class WorkspaceService {
         projects: {
           include: {
             tasks: true,
-            members: true,
+            members: {
+              include: {
+                user: true
+              }
+            },
             _count: {
               select: { tasks: true }
             }
@@ -68,7 +72,17 @@ export class WorkspaceService {
     const workspace = await prisma.workspace.findUnique({
       where: { id },
       include: {
-        projects: true,
+        projects: {
+            include: {
+                members: {
+                    include: { user: true }
+                },
+                tasks: true,
+                _count: {
+                    select: { tasks: true }
+                }
+            }
+        },
         members: {
             include: {
                 user: true
