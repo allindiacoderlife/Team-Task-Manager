@@ -9,6 +9,14 @@ export const authService = {
     const response = await api.post("/auth/login", { email, password });
     return response.data;
   },
+  sendOtp: async (email, type = "LOGIN", token) => {
+    const response = await api.post(
+      "/auth/send-otp",
+      { email, type },
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    return response.data;
+  },
   verifyOtp: async (email, code, type = "LOGIN") => {
     const response = await api.post("/auth/verify-otp", { email, code, type });
     return response.data;

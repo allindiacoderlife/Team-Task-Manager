@@ -53,7 +53,7 @@ const ForgetPassword = () => {
 
     setIsLoading(true);
     try {
-      await authService.forgetPassword(email);
+      await authService.forgotPassword(email);
       toast({
         title: "OTP Sent",
         description: "A verification code has been sent to your email.",
@@ -155,7 +155,7 @@ const ForgetPassword = () => {
   // Resend OTP
   const handleResend = async () => {
     try {
-      await authService.forgetPassword(email);
+      await authService.forgotPassword(email);
       toast({
         title: "OTP Resent",
         description: "A new verification code has been sent to your email.",

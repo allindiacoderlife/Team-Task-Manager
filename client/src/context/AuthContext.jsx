@@ -38,12 +38,22 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, [token]);
 
-  // Step 1: Admin login (email + password) → triggers OTP
+  // Step 1: Admin login (email + password) → verify credentials → send OTP
   const login = async (email, password) => {
+    // 1. Verify credentials — server returns a short-lived token
     const response = await authService.login(email, password);
-    // Store email for OTP step
+    const tempToken = response.token || response.data?.token;
+
+    // 2. Store email + temp token so the OTP step can use them
     setPendingEmail(email);
     sessionStorage.setItem("pendingEmail", email);
+    if (tempToken) {
+      sessionStorage.setItem("pendingToken", tempToken);
+    }
+
+    // 3. Send OTP email — requires the bearer token from step 1
+    await authService.sendOtp(email, "LOGIN", tempToken);
+
     return response;
   };
 
@@ -83,6 +93,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     sessionStorage.removeItem("pendingEmail");
+    sessionStorage.removeItem("pendingToken");
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
