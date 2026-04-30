@@ -81,7 +81,13 @@ export class TaskService {
     
     const project = await prisma.project.findUnique({ where: { id: projectId } });
 
-    if (!member && project?.team_lead !== userId) throw new ForbiddenError("Access denied");
+    const workspaceMember = await prisma.workspaceMember.findUnique({
+      where: { userId_workspaceId: { userId, workspaceId: project.workspaceId } }
+    });
+
+    if (!workspaceMember) {
+      throw new ForbiddenError("Access denied: Not a member of this workspace");
+    }
 
     return await prisma.task.findMany({
       where: { projectId },
@@ -134,9 +140,13 @@ export class TaskService {
 
     if (!task) throw new NotFoundError("Task not found");
 
-    const isMember = task.project.members.some(m => m.userId === userId);
-    if (!isMember && task.project.team_lead !== userId) {
-        throw new ForbiddenError("Access denied");
+    const workspaceMember = await prisma.workspaceMember.findUnique({
+        where: { userId_workspaceId: { userId, workspaceId: task.project.workspaceId } }
+    });
+
+    // Anyone in the workspace can view tasks (unless we implement private projects later)
+    if (!workspaceMember) {
+        throw new ForbiddenError("Access denied: Not a member of this workspace");
     }
 
     return task;

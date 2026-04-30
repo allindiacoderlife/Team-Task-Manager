@@ -37,9 +37,17 @@ export class ProjectService {
   }
 
   async getMyProjects(userId) {
+    // Get all workspace IDs the user belongs to
+    const userWorkspaces = await prisma.workspaceMember.findMany({
+      where: { userId },
+      select: { workspaceId: true }
+    });
+    const workspaceIds = userWorkspaces.map(w => w.workspaceId);
+
     return await prisma.project.findMany({
       where: {
         OR: [
+          { workspaceId: { in: workspaceIds } },
           { team_lead: userId },
           { members: { some: { userId } } }
         ]
