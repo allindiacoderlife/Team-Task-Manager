@@ -16,6 +16,13 @@ export default function TasksSummary() {
         }
     }, [currentWorkspace]);
 
+    useEffect(() => {
+        console.error("DEBUG - Current user ID:", user?.id);
+        console.error("DEBUG - Total tasks:", tasks.length);
+        const mine = tasks.filter(i => i.assigneeId === user?.id);
+        console.error("DEBUG - My tasks found:", mine.length);
+    }, [tasks, user]);
+
     const myTasks = tasks.filter(i => i.assigneeId === user?.id);
     const overdueTasks = tasks.filter(t => (t.dueDate || t.due_date) && new Date(t.dueDate || t.due_date) < new Date() && t.status !== 'DONE');
     const inProgressIssues = tasks.filter(i => i.status === 'IN_PROGRESS');
