@@ -1,14 +1,16 @@
 import { format } from "date-fns";
-import { Plus, Save } from "lucide-react";
+import { Plus, Save, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddProjectMember from "./AddProjectMember";
 import api from "../lib/api";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { fetchWorkspaceData } from "../features/workspaceSlice";
+import { fetchWorkspaceData, removeProjectMemberData } from "../features/workspaceSlice";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProjectSettings({ project }) {
     const dispatch = useDispatch();
+    const { user: currentUser } = useAuth();
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -48,6 +50,17 @@ export default function ProjectSettings({ project }) {
             toast.error(error.response?.data?.message || "Failed to update project");
         } finally {
             setIsSubmitting(false);
+        }
+    };
+
+    const handleRemoveMember = async (userId) => {
+        if (!window.confirm("Are you sure you want to remove this member from the project?")) return;
+
+        try {
+            await dispatch(removeProjectMemberData({ projectId: project.id, userId })).unwrap();
+            toast.success("Member removed from project");
+        } catch (error) {
+            toast.error(error.message || "Failed to remove member");
         }
     };
 
@@ -148,7 +161,21 @@ export default function ProjectSettings({ project }) {
                             {project.members.map((member, index) => (
                                 <div key={index} className="flex items-center justify-between px-3 py-2 rounded dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-300" >
                                     <span> {member?.user?.email || "Unknown"} </span>
-                                    {project.team_lead === member.user?.id && <span className="px-2 py-0.5 rounded-xs ring ring-zinc-200 dark:ring-zinc-600">Team Lead</span>}
+                                    <div className="flex items-center gap-2">
+                                        {project.team_lead === member.user?.id ? (
+                                            <span className="px-2 py-0.5 rounded-xs ring ring-zinc-200 dark:ring-zinc-600">Team Lead</span>
+                                        ) : (
+                                            (currentUser.id === project.team_lead) && (
+                                                <button
+                                                    onClick={() => handleRemoveMember(member.userId)}
+                                                    className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded transition-colors"
+                                                    title="Remove from project"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            )
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>

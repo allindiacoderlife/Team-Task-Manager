@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { OTPInput } from "input-otp";
 import { ShieldCheck, ArrowLeft, Loader2, Wallpaper } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -15,6 +15,7 @@ export function VerifyForm({ className, ...props }) {
   const { verifyOtp, pendingEmail, login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // If there's no pending email, redirect back to login
@@ -44,7 +45,8 @@ export function VerifyForm({ className, ...props }) {
         title: "Verification Successful",
         description: "Welcome to Team Task Manager.",
       });
-      navigate("/", { replace: true });
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
     } catch (error) {
       toast({
         variant: "destructive",

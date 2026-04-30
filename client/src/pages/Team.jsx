@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { UsersIcon, Search, UserPlus, Shield, Activity } from "lucide-react";
 import InviteMemberDialog from "../components/InviteMemberDialog";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { removeMemberData } from "../features/workspaceSlice";
+import { toast } from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
+import { Trash2 } from "lucide-react";
 
 const Team = () => {
 
@@ -10,7 +14,21 @@ const Team = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [users, setUsers] = useState([]);
     const currentWorkspace = useSelector((state) => state?.workspace?.currentWorkspace || null);
+    const { user: currentUser } = useAuth();
+    const dispatch = useDispatch();
+
     const projects = currentWorkspace?.projects || [];
+
+    const handleRemove = async (memberId) => {
+        if (!window.confirm("Are you sure you want to remove this member?")) return;
+
+        try {
+            await dispatch(removeMemberData({ workspaceId: currentWorkspace.id, memberId })).unwrap();
+            toast.success("Member removed successfully");
+        } catch (error) {
+            toast.error(error.message || "Failed to remove member");
+        }
+    };
 
     const filteredUsers = users.filter(
         (user) =>
@@ -123,6 +141,9 @@ const Team = () => {
                                         <th className="px-6 py-2.5 text-left font-medium text-sm">
                                             Role
                                         </th>
+                                        <th className="px-6 py-2.5 text-right font-medium text-sm">
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
@@ -153,6 +174,17 @@ const Team = () => {
                                                 >
                                                     {user.role || "User"}
                                                 </span>
+                                            </td>
+                                            <td className="px-6 py-2.5 whitespace-nowrap text-right">
+                                                {user.userId !== currentWorkspace.ownerId && (currentUser.id === currentWorkspace.ownerId || currentUser.role === "ADMIN") && (
+                                                    <button
+                                                        onClick={() => handleRemove(user.userId)}
+                                                        className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded transition-colors"
+                                                        title="Remove Member"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
@@ -191,6 +223,16 @@ const Team = () => {
                                         >
                                             {user.role || "User"}
                                         </span>
+                                    </div>
+                                    <div className="mt-4 pt-3 border-t border-gray-100 dark:border-zinc-800 flex justify-end">
+                                        {user.userId !== currentWorkspace.ownerId && (currentUser.id === currentWorkspace.ownerId || currentUser.role === "ADMIN") && (
+                                            <button
+                                                onClick={() => handleRemove(user.userId)}
+                                                className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 font-medium"
+                                            >
+                                                <Trash2 size={14} /> Remove
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             ))}

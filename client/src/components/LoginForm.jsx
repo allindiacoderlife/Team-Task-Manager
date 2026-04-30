@@ -13,7 +13,7 @@ import {
   Wallpaper,
 } from "lucide-react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../hooks/use-toast";
 
@@ -26,6 +26,7 @@ export function LoginForm({ className, ...props }) {
   const { login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +39,8 @@ export function LoginForm({ className, ...props }) {
         title: "OTP Sent",
         description: "A verification code has been sent to your email.",
       });
-      navigate("/verify");
+      // Pass the intended destination to the verify page
+      navigate("/verify", { state: { from: location.state?.from } });
     } catch (error) {
       toast({
         variant: "destructive",

@@ -34,7 +34,12 @@ const AcceptInvite = () => {
     const handleAccept = async () => {
         try {
             setLoading(true);
-            await api.post("/invitations/accept", { token });
+            const response = await api.post("/invitations/accept", { token });
+            const { workspaceId } = response.data;
+            
+            // Set as current workspace so user sees it immediately
+            localStorage.setItem("currentWorkspaceId", workspaceId);
+            
             toast.success("Invitation accepted successfully!");
             navigate("/");
         } catch (err) {
@@ -81,11 +86,11 @@ const AcceptInvite = () => {
                     <span className="font-semibold text-blue-600 dark:text-blue-400">
                         {invitation.workspace_rel?.name}
                     </span>
-                    {invitation.workspace && (
+                    {invitation.project && (
                         <>
                             {" "}and the project{" "}
                             <span className="font-semibold text-blue-600 dark:text-blue-400">
-                                {invitation.workspace?.name}
+                                {invitation.project?.name}
                             </span>
                         </>
                     )}

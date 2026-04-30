@@ -37,6 +37,30 @@ export const createTaskData = createAsyncThunk(
     }
 );
 
+export const removeMemberData = createAsyncThunk(
+    "workspace/removeMemberData",
+    async ({ workspaceId, memberId }, { rejectWithValue }) => {
+        try {
+            await api.delete(`/workspaces/${workspaceId}/members/${memberId}`);
+            return { workspaceId, memberId };
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+
+export const removeProjectMemberData = createAsyncThunk(
+    "workspace/removeProjectMemberData",
+    async ({ projectId, userId }, { rejectWithValue }) => {
+        try {
+            await api.delete(`/projects/${projectId}/members/${userId}`);
+            return { projectId, userId };
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+
 const initialState = {
     workspaces: [],
     currentWorkspace: null,
@@ -137,6 +161,16 @@ const workspaceSlice = createSlice({
                     )
                 } : w
             );
+        },
+        removeMember: (state, action) => {
+            const { memberId } = action.payload;
+            if (state.currentWorkspace) {
+                state.currentWorkspace.members = state.currentWorkspace.members.filter(m => m.userId !== memberId);
+            }
+            state.workspaces = state.workspaces.map(w => ({
+                ...w,
+                members: w.members.filter(m => m.userId !== memberId)
+            }));
         }
 
     },
@@ -189,6 +223,33 @@ const workspaceSlice = createSlice({
                         project.tasks.push(newTask);
                     }
                 }
+            })
+            .addCase(removeMemberData.fulfilled, (state, action) => {
+                const { memberId } = action.payload;
+                if (state.currentWorkspace) {
+                    state.currentWorkspace.members = state.currentWorkspace.members.filter(m => m.userId !== memberId);
+                }
+                state.workspaces = state.workspaces.map(w => ({
+                    ...w,
+                    members: w.members.filter(m => m.userId !== memberId)
+                }));
+            })
+            .addCase(removeProjectMemberData.fulfilled, (state, action) => {
+                const { projectId, userId } = action.payload;
+                if (state.currentWorkspace) {
+                    const project = state.currentWorkspace.projects.find(p => p.id === projectId);
+                    if (project) {
+                        project.members = project.members.filter(m => m.userId !== userId);
+                    }
+                }
+                state.workspaces = state.workspaces.map(w => ({
+                    ...w,
+                    projects: w.projects.map(p => 
+                        p.id === projectId 
+                        ? { ...p, members: p.members.filter(m => m.userId !== userId) } 
+                        : p
+                    )
+                }));
             });
     }
 });
