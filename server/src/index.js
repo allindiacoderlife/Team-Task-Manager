@@ -12,8 +12,7 @@ const app = express();
 
 app.use(
   cors({
-    origin:
-      process.env.CLIENT_URL || "https://team-task-manager-c.up.railway.app",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
   }),
 );
