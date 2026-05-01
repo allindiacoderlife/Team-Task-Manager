@@ -1,6 +1,6 @@
 import prisma from "../../lib/prisma.js";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../../utils/appError.js";
-import { transporter, projectInvitationTemplate } from "../../lib/mailer.js";
+import { sendEmail, projectInvitationTemplate } from "../../lib/mailer.js";
 import { config } from "../../config/app.config.js";
 
 export class ProjectService {
@@ -102,8 +102,7 @@ export class ProjectService {
 
     // Send invitation email
     try {
-      await transporter.sendMail({
-        from: `"Team Task Manager" <${config.smtp.user}>`,
+      await sendEmail({
         to: userToAdd.email,
         subject: `You've been added to project: ${project.name}`,
         html: projectInvitationTemplate(

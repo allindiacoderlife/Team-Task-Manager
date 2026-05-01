@@ -1,6 +1,6 @@
 import prisma from "../../lib/prisma.js";
 import { BadRequestError, NotFoundError, ForbiddenError } from "../../utils/appError.js";
-import { transporter, workspaceInvitationTemplate } from "../../lib/mailer.js";
+import { sendEmail, workspaceInvitationTemplate } from "../../lib/mailer.js";
 import { config } from "../../config/app.config.js";
 
 export class WorkspaceService {
@@ -140,8 +140,7 @@ export class WorkspaceService {
 
     // Send invitation email
     try {
-      await transporter.sendMail({
-        from: `"Team Task Manager" <${config.smtp.user}>`,
+      await sendEmail({
         to: userToAdd.email,
         subject: `You've been added to workspace: ${workspace.name}`,
         html: workspaceInvitationTemplate(

@@ -1,7 +1,7 @@
 import prisma from "../../lib/prisma.js";
 import crypto from "crypto";
 import { BadRequestError, NotFoundError } from "../../utils/appError.js";
-import { transporter, projectInvitationTemplate, workspaceInvitationTemplate } from "../../lib/mailer.js";
+import { sendEmail, projectInvitationTemplate, workspaceInvitationTemplate } from "../../lib/mailer.js";
 import { config } from "../../config/app.config.js";
 
 export class InvitationService {
@@ -31,8 +31,7 @@ export class InvitationService {
 
     // Send email
     try {
-      await transporter.sendMail({
-        from: `"Team Task Manager" <${config.smtp.user}>`,
+      await sendEmail({
         to: email,
         subject: `Invitation to join workspace: ${workspace.name}`,
         html: workspaceInvitationTemplate(workspace.name, email, invitation.invitedBy.name, inviteLink),
@@ -71,8 +70,7 @@ export class InvitationService {
 
     // Send email
     try {
-      await transporter.sendMail({
-        from: `"Team Task Manager" <${config.smtp.user}>`,
+      await sendEmail({
         to: email,
         subject: `Invitation to join project: ${project.name}`,
         html: projectInvitationTemplate(project.name, email, invitation.invitedBy.name, inviteLink),

@@ -2,7 +2,7 @@ import { config } from "../../config/app.config.js";
 import prisma from "../../lib/prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { otpEmailTemplate, transporter } from "../../lib/mailer.js";
+import { otpEmailTemplate, sendEmail } from "../../lib/mailer.js";
 import {
   BadRequestError,
   UnauthorizedError,
@@ -118,8 +118,7 @@ export class AuthService {
       });
 
       // Send plain OTP via email
-      await transporter.sendMail({
-        from: config.smtp.user,
+      await sendEmail({
         to: normalizedEmail,
         subject:
           type === "LOGIN" ? "Login Verification Code" : "Password Reset Code",

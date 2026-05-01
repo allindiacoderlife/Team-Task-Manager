@@ -1,32 +1,27 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { config } from "../config/app.config.js";
 
-export const transporter = nodemailer.createTransport({
-  host: config.smtp.host,
-  port: Number(config.smtp.port),
-  secure: Number(config.smtp.port) === 465,
-  family: 4,
-  connectionTimeout: 20000,
-  greetingTimeout: 20000,
-  socketTimeout: 20000,
-  auth: {
-    user: config.smtp.user,
-    pass: config.smtp.pass,
-  },
-  tls: {
-    rejectUnauthorized: false,
-    minVersion: "TLSv1.2",
-  },
-});
+const resend = new Resend(config.resendApiKey);
 
-// Verify connection configuration
-transporter.verify((error, success) => {
+/**
+ * Unified email sender using Resend (HTTP-based, no SMTP blocking)
+ */
+export async function sendEmail({ to, subject, html }) {
+  const { data, error } = await resend.emails.send({
+    from: config.emailFrom,
+    to,
+    subject,
+    html,
+  });
+
   if (error) {
-    console.error("❌ Email transporter error:", error);
-  } else {
-    console.log("✅ Email server is ready to send messages");
+    console.error("❌ Resend email error:", error);
+    throw new Error(error.message || "Failed to send email");
   }
-});
+
+  console.log("✅ Email sent via Resend:", data.id);
+  return data;
+}
 
 export function otpEmailTemplate(otp) {
   return `

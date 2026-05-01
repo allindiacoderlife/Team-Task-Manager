@@ -13,11 +13,7 @@ export const config = {
     jwtSecret: process.env.JWT_SECRET || "",
   },
 
-  //! ─── SMTP Configuration ────────────────────────────────
-  smtp: {
-    host: process.env.SMTP_HOST || "",
-    port: process.env.SMTP_PORT || 587,
-    user: process.env.SMTP_USER || "",
-    pass: process.env.SMTP_PASS || "",
-  },
+  //! ─── Email Configuration (Resend) ─────────────────────
+  resendApiKey: process.env.RESEND_API_KEY || "",
+  emailFrom: process.env.EMAIL_FROM || "Team Task Manager <onboarding@resend.dev>",
 };
