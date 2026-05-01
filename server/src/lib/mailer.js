@@ -4,14 +4,14 @@ import { config } from "../config/app.config.js";
 export const transporter = nodemailer.createTransport({
   host: config.smtp.host,
   port: Number(config.smtp.port),
-  secure: false,
+  secure: Number(config.smtp.port) === 465,
   family: 4,
   auth: {
     user: config.smtp.user,
     pass: config.smtp.pass,
   },
   tls: {
-    rejectUnauthorized: false, // For development, accept self-signed certificates
+    rejectUnauthorized: false,
   },
 });
 
