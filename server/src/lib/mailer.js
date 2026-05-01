@@ -5,6 +5,7 @@ export const transporter = nodemailer.createTransport({
   host: config.smtp.host,
   port: Number(config.smtp.port),
   secure: false,
+  family: 4,
   auth: {
     user: config.smtp.user,
     pass: config.smtp.pass,
@@ -91,7 +92,12 @@ export function otpEmailTemplate(otp) {
   `;
 }
 
-export function projectInvitationTemplate(projectName, inviteeName, inviterName, inviteLink) {
+export function projectInvitationTemplate(
+  projectName,
+  inviteeName,
+  inviterName,
+  inviteLink,
+) {
   return `
   <!DOCTYPE html>
   <html>
@@ -154,7 +160,12 @@ export function projectInvitationTemplate(projectName, inviteeName, inviterName,
   `;
 }
 
-export function workspaceInvitationTemplate(workspaceName, inviteeName, inviterName, inviteLink) {
+export function workspaceInvitationTemplate(
+  workspaceName,
+  inviteeName,
+  inviterName,
+  inviteLink,
+) {
   return `
   <!DOCTYPE html>
   <html>
