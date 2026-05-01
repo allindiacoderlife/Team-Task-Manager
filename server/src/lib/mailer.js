@@ -6,12 +6,16 @@ export const transporter = nodemailer.createTransport({
   port: Number(config.smtp.port),
   secure: Number(config.smtp.port) === 465,
   family: 4,
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000,
   auth: {
     user: config.smtp.user,
     pass: config.smtp.pass,
   },
   tls: {
     rejectUnauthorized: false,
+    minVersion: "TLSv1.2",
   },
 });
 
