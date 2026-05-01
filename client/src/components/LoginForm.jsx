@@ -36,11 +36,12 @@ export function LoginForm({ className, ...props }) {
     try {
       await login(email, password);
       toast({
-        title: "OTP Sent",
-        description: "A verification code has been sent to your email.",
+        title: "Login Successful",
+        description: "Welcome back to Team Task Manager!",
       });
-      // Pass the intended destination to the verify page
-      navigate("/verify", { state: { from: location.state?.from } });
+      // Navigate directly to the intended page or dashboard
+      const from = location.state?.from || "/dashboard";
+      navigate(from, { replace: true });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -124,16 +125,6 @@ export function LoginForm({ className, ...props }) {
           </Link>
         </div>
 
-        <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 flex items-start gap-3">
-          <ShieldCheck className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-          <div className="text-xs text-muted-foreground">
-            <span className="font-semibold text-primary block mb-0.5">
-              Two-Factor Authentication Enabled
-            </span>
-            For security, you will be asked to verify your identity via email
-            OTP after signing in.
-          </div>
-        </div>
 
         <Button
           type="submit"
